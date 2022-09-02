@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/coreos/go-semver v0.3.0
-	github.com/coreos/go-systemd/v22 v22.3.2
+	github.com/coreos/go-systemd/v22 v22.3.3-0.20220203105225-a9a7ef127534
 	github.com/dustin/go-humanize v1.0.0
 	github.com/form3tech-oss/jwt-go v3.2.3+incompatible
 	github.com/gogo/protobuf v1.3.2
@@ -18,6 +18,7 @@ require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/prometheus/client_golang v1.11.1
 	github.com/prometheus/client_model v0.2.0
+	github.com/rs/zerolog v1.28.0 // indirect
 	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/soheilhy/cmux v0.1.5
 	github.com/spf13/cobra v1.1.3
