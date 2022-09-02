@@ -16,6 +16,7 @@ package backend
 
 import (
 	"bytes"
+	"github.com/rs/zerolog/log"
 	"math"
 	"sync"
 	"sync/atomic"
@@ -147,6 +148,8 @@ func (t *batchTx) UnsafeSeqPut(bucket Bucket, key []byte, value []byte) {
 }
 
 func (t *batchTx) unsafePut(bucketType Bucket, key []byte, value []byte, seq bool) {
+	log.Debug().Bytes("key", key).Bytes("value", value).Msg("batchTx.unsafePut")
+
 	bucket := t.tx.Bucket(bucketType.Name())
 	if bucket == nil {
 		t.backend.lg.Fatal(

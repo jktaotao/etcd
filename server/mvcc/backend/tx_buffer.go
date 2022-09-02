@@ -16,6 +16,7 @@ package backend
 
 import (
 	"bytes"
+	"github.com/rs/zerolog/log"
 	"sort"
 )
 
@@ -45,6 +46,7 @@ type txWriteBuffer struct {
 }
 
 func (txw *txWriteBuffer) put(bucket Bucket, k, v []byte) {
+	log.Debug().Bytes("key", k).Bytes("value", v).Msg("txWriteBuffer.put")
 	txw.bucket2seq[bucket.ID()] = false
 	txw.putInternal(bucket, k, v)
 }

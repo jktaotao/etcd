@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/rs/zerolog/log"
 	"hash/crc32"
 	"io"
 	"os"
@@ -893,6 +894,7 @@ func (w *WAL) Close() error {
 
 func (w *WAL) saveEntry(e *raftpb.Entry) error {
 	// TODO: add MustMarshalTo to reduce one allocation.
+	log.Debug().Interface("WAL.saveEntry", e).Send()
 	b := pbutil.MustMarshal(e)
 	rec := &walpb.Record{Type: entryType, Data: b}
 	if err := w.encoder.encode(rec); err != nil {
