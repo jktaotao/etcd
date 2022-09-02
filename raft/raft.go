@@ -383,6 +383,7 @@ func (r *raft) hardState() pb.HardState {
 
 // send schedules persisting state to a stable storage and AFTER that
 // sending the message (as part of next Ready message processing).
+// 只是把数据放到msg 中并没有立即处理，下一次ready会有数据
 func (r *raft) send(m pb.Message) {
 	if m.From == None {
 		m.From = r.id

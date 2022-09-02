@@ -17,7 +17,7 @@ package raft
 import (
 	"context"
 	"errors"
-
+	"github.com/rs/zerolog/log"
 	pb "go.etcd.io/etcd/raft/v3/raftpb"
 )
 
@@ -342,7 +342,9 @@ func (n *node) run() {
 		// TODO: maybe buffer the config propose if there exists one (the way
 		// described in raft dissertation)
 		// Currently it is dropped in Step silently.
+		//来自客户端的
 		case pm := <-propc:
+			log.Debug().Interface("pm := <-propc", pm.m).Send()
 			m := pm.m
 			m.From = r.id
 			err := r.Step(m)
@@ -351,6 +353,9 @@ func (n *node) run() {
 				close(pm.result)
 			}
 		case m := <-n.recvc:
+			if m.Type != pb.MsgHeartbeat && m.Type != pb.MsgHeartbeatResp {
+				log.Debug().Interface("m := <-n.recvc", m).Send()
+			}
 			// filter out response message from unknown From.
 			if pr := r.prs.Progress[m.From]; pr != nil || !IsResponseMsg(m.Type) {
 				r.Step(m)
@@ -389,6 +394,9 @@ func (n *node) run() {
 		case <-n.tickc:
 			n.rn.Tick()
 		case readyc <- rd:
+			if len(rd.Messages) > 0 && rd.Messages[0].Type != pb.MsgHeartbeatResp && rd.Messages[0].Type != pb.MsgHeartbeat {
+				log.Debug().Interface("readyc <- rd", rd).Send()
+			}
 			n.rn.acceptReady(rd)
 			advancec = n.advancec
 		case <-advancec:
